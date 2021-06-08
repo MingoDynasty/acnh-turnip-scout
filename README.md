@@ -1,6 +1,7 @@
 # Animal Crossing Turnip Price Scout
 
-Turnip Price Scout (TPS) is a Python application that scouts turnip prices by crawling your favorite subreddits. By default the application scouts the [/r/acturnips](https://www.reddit.com/r/acturnips/) subreddit.
+Turnip Price Scout (TPS) is a Python application that scouts turnip prices by crawling your favorite subreddits. By
+default the application scouts the [/r/acturnips](https://www.reddit.com/r/acturnips/) subreddit.
 
 It scouts the subreddit at given intervals and keeps track of turnip prices. When new offers are found, it will send
 messages to the configured Telegram account.
@@ -19,7 +20,8 @@ messages to the configured Telegram account.
     pip install -r requirements.txt
     ```
 
-    If you don't have Python installed, you can download it from [here](https://www.python.org/downloads/) (on Windows, make sure you add it to PATH during installation)
+   If you don't have Python installed, you can download it from [here](https://www.python.org/downloads/) (on Windows,
+   make sure you add it to PATH during installation)
 
 3. Modify the contents of `config.ini` to include your Reddit API key and Telegram bot token and chat ID.
 
@@ -36,16 +38,19 @@ messages to the configured Telegram account.
     chatID = your chat id
     ```
 
-    1. You can generate a new Reddit app key [here](https://www.reddit.com/prefs/apps). Scroll down and click 'Create another application'.
+    1. You can generate a new Reddit app key [here](https://www.reddit.com/prefs/apps). Scroll down and click 'Create
+       another application'.
         1. Give it a **name** of your choice like `acnh turnip scout`
         2. Select type `script`
         3. You can leave **description** and **about url** empty
         4. The **redirect uri** is mandatory but its value doesn't really matter, you can use `http://localhost:8080`
     2. Replace the `client_id` field with the alphanumeric string below **personal use script**
     3. Replace the `client_secret` field with the alphanumeric string on the right side of **secret**
-    4. You can create a new Telegram bot [here](https://core.telegram.org/bots#6-botfather). Follow the instructions. To find your chat ID, talk with Telegram's 'userinfobot'.
+    4. You can create a new Telegram bot [here](https://core.telegram.org/bots#6-botfather). Follow the instructions. To
+       find your chat ID, talk with Telegram's 'userinfobot'.
 
-**NB: after having configured the Telegram bot, open a new chat with the bot and send `/start` or you won't be receiving messages!**
+**NB: after having configured the Telegram bot, open a new chat with the bot and send `/start` or you won't be receiving
+messages!**
 
 ## Usage
 

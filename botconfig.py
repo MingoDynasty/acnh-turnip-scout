@@ -1,6 +1,9 @@
-from requests import get
-import config
 from datetime import datetime
+
+from requests import get
+
+import config
+
 
 def sendText(title, price, created, shortlink):
     # Globally store values from config instead of adding per request

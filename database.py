@@ -1,6 +1,4 @@
 import sqlite3
-import time
-
 
 DB_PATH = 'data/turnip_submissions.db'
 
@@ -37,7 +35,8 @@ def add_submission(sub):
         print("[DB]({id}) - Adding to db".format(id=sub.id))
         db = sqlite3.connect(DB_PATH)
         cursor = db.cursor()
-        cursor.execute('''INSERT INTO submissions(id,title,created,shortlink) VALUES(?,?,?,?)''', (sub.id,sub.title,sub.created_utc,sub.shortlink))
+        cursor.execute('''INSERT INTO submissions(id,title,created,shortlink) VALUES(?,?,?,?)''',
+                       (sub.id, sub.title, sub.created_utc, sub.shortlink))
         db.commit()
         return True
     else:
