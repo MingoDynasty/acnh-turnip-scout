@@ -14,17 +14,17 @@ if __name__ == '__main__':
     reddit.evaluatePosts()
 
     # main loop
-    s = sched.scheduler(time.time, time.sleep)
+    scheduler = sched.scheduler(time.time, time.sleep)
 
 
     def main_loop(sc):
         print("\n---- Polling Reddit ----")
         reddit.evaluatePosts()
-        s.enter(ping_interval, 1, main_loop, (sc,))
+        scheduler.enter(ping_interval, 1, main_loop, (sc,))
 
 
     try:
-        s.enter(ping_interval, 1, main_loop, (s,))
-        s.run()
+        scheduler.enter(ping_interval, 1, main_loop, (scheduler,))
+        scheduler.run()
     except KeyboardInterrupt:
         print("---- Stopping the bot ----")
