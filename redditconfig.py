@@ -25,7 +25,7 @@ savedPosts = []
 
 
 def base64String(value, shouldDecode):
-    if (shouldDecode == 'true'):
+    if shouldDecode == 'true':
         return value.decode(encodingType)
     else:
         message_bytes = value.encode(encodingType)
