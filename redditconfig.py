@@ -5,9 +5,13 @@ import re
 
 import praw
 
-import botconfig as telegram
+# import botconfig as telegram
 import config
-import database as db
+# import database as db
+import logging
+
+from botconfig import BotController
+from database import DatabaseController
 
 reddit = praw.Reddit(
     client_id=config.read_config('REDDITCONFIG', 'client_id'),
@@ -59,38 +63,44 @@ def decodeString(base64EncryptedString):
 #        return text[:-1]
 
 
-def evaluatePosts():
-    postcount = int(config.read_config('REDDITCONFIG', 'post_count'))
-    if not postcount:
-        postcount = 10
+class RedditController:
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        self.databaseController = DatabaseController()
+        self.botController = BotController()
 
-    new_submissions = reddit.subreddit(subreddit).new(limit=postcount)
+    def evaluatePosts(self):
+        postcount = int(config.read_config('REDDITCONFIG', 'post_count'))
+        if not postcount:
+            postcount = 10
 
-    # iterate over new submissions from oldest to newest
-    for submission in reversed(list(new_submissions)):
+        new_submissions = reddit.subreddit(subreddit).new(limit=postcount)
 
-        # if the submission is Active and we haven't already considered it, then do something
-        if submission.link_flair_text == 'Active' and not db.does_submission_exists(submission.id):
+        # iterate over new submissions from oldest to newest
+        for submission in reversed(list(new_submissions)):
 
-            numbers = re.findall(r'\d+', submission.title)
-            if numbers:
-                # use list comprehension to easily get biggest number
-                biggest_number = max([int(num) for num in numbers])
-            else:
-                print("[RD]({id}) - Couldn't find price in title '{title}'!".format(id=submission.id,
-                                                                                    title=submission.title))
-                continue
+            # if the submission is Active and we haven't already considered it, then do something
+            if submission.link_flair_text == 'Active' and not self.databaseController.does_submission_exists(submission.id):
 
-            if (biggest_number > int(minimum_price)):
-                # try adding to database
-                if db.add_submission(submission):
-                    print("[RD]({id}) - Submission added, sending message".format(id=submission.id))
-                    telegram.sendText(submission.title, biggest_number, submission.created_utc, submission.shortlink)
+                numbers = re.findall(r'\d+', submission.title)
+                if numbers:
+                    # use list comprehension to easily get biggest number
+                    biggest_number = max([int(num) for num in numbers])
                 else:
-                    print("[RD]({id}) - Error while adding submission to database".format(id=submission.id))
+                    self.logger.info("[RD]({id}) - Couldn't find price in title '{title}'!".format(id=submission.id,
+                                                                                        title=submission.title))
+                    continue
+
+                if (biggest_number > int(minimum_price)):
+                    # try adding to database
+                    if self.databaseController.add_submission(submission):
+                        self.logger.info("[RD]({id}) - Submission added, sending message".format(id=submission.id))
+                        self.botController.sendText(submission.title, biggest_number, submission.created_utc, submission.shortlink)
+                    else:
+                        self.logger.info("[RD]({id}) - Error while adding submission to database".format(id=submission.id))
+                else:
+                    self.logger.info("[RD]({id}) - Price '{price}' is lower than minimum value".format(price=biggest_number,
+                                                                                            id=submission.id))
             else:
-                print("[RD]({id}) - Price '{price}' is lower than minimum value".format(price=biggest_number,
-                                                                                        id=submission.id))
-        else:
-            # else ignore submission
-            pass
+                # else ignore submission
+                pass
