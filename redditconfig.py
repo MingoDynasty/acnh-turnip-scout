@@ -72,9 +72,13 @@ class RedditController:
             postcount = 10
 
         new_submissions = reddit.subreddit(subreddit).new(limit=postcount)
+        list_submissions = list(new_submissions)
+        # self.logger.debug("Found %s new submissions.", len(list_submissions))
+
+        count = 0
 
         # iterate over new submissions from oldest to newest
-        for submission in reversed(list(new_submissions)):
+        for submission in reversed(list_submissions):
 
             # if the submission is Active and we haven't already considered it, then do something
             if submission.link_flair_text == 'Active' and not self.databaseController.does_submission_exists(submission.id):
@@ -88,11 +92,12 @@ class RedditController:
                                                                                         title=submission.title))
                     continue
 
-                if (biggest_number > int(minimum_price)):
+                if biggest_number > int(minimum_price):
                     # try adding to database
                     if self.databaseController.add_submission(submission):
                         self.logger.info("[RD]({id}) - Submission added, sending message".format(id=submission.id))
                         self.botController.sendText(submission.title, biggest_number, submission.created_utc, submission.shortlink)
+                        count += 1
                     else:
                         self.logger.info("[RD]({id}) - Error while adding submission to database".format(id=submission.id))
                 else:
@@ -101,3 +106,5 @@ class RedditController:
             else:
                 # else ignore submission
                 pass
+
+        self.logger.info("Found %d submissions matching filter.", count)
