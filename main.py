@@ -20,8 +20,6 @@ if __name__ == '__main__':
     logging.config.fileConfig(logConfFile)
     logger = logging.getLogger(__name__)
 
-    logger.info("mingtest start")
-
     # telegram.setup()
 
     databaseController = DatabaseController()
