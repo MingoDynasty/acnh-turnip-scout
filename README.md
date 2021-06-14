@@ -36,6 +36,10 @@ messages to the configured Telegram account.
     [Telegram Config]
     token = your bot token
     chatID = your chat id
+   
+    [Application Config]
+    # How often to poll Reddit, in seconds.
+    poll_interval = 180
     ```
 
     1. You can generate a new Reddit app key [here](https://www.reddit.com/prefs/apps). Scroll down and click 'Create
