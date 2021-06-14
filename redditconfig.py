@@ -1,17 +1,14 @@
 import base64
-# from pytesseract import pytesseract
-# import requests
 import re
 
 import praw
 
-# import botconfig as telegram
 import config
-# import database as db
 import logging
 
 from botconfig import BotController
 from database import DatabaseController
+
 
 reddit = praw.Reddit(
     client_id=config.read_config('REDDITCONFIG', 'client_id'),
