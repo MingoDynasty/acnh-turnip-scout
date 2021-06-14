@@ -1,4 +1,3 @@
-import base64
 import logging
 import re
 
@@ -8,54 +7,8 @@ import config
 from bot_controller import BotController
 from database import DatabaseController
 
-reddit = praw.Reddit(
-    client_id=config.read_config('Reddit Config', 'client_id'),
-    client_secret=config.read_config('Reddit Config', 'client_secret'),
-    user_agent=config.read_config('Reddit Config', 'user_agent')
-)
-encodingType = 'utf-8'
 subreddit = config.read_config('Reddit Config', 'subreddit')
 minimum_price = config.read_config('Reddit Config', 'minimum_price')
-savedPosts = []
-
-
-def base64String(value, shouldDecode):
-    if shouldDecode == 'true':
-        return value.decode(encodingType)
-    else:
-        message_bytes = value.encode(encodingType)
-        return base64.b64encode(message_bytes)
-
-
-def encodeString(str):
-    message_bytes = str.encode(encodingType)
-    base64_bytes = base64.b64encode(message_bytes)
-    return base64_bytes
-
-
-def decodeString(base64EncryptedString):
-    base64_message = base64EncryptedString.decode(encodingType)
-    decoded_string = base64.b64decode(base64_message)
-    return decoded_string
-
-
-# Used as a last resort to find the price from the image if it cannot be found in the submission title
-# temporarily disabled
-# def extract_text(url):
-#    # Uses tesseract from following lib. Needs to be installed locally -> https://github.com/UB-Mannheim/tesseract/wiki
-#    path_to_tesseract = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-#    image_path = url
-#    img_data = requests.get(url).content
-#    filename = url.split('/')[-1]
-#    if filename:
-#        with open(filename, 'wb') as handler:
-#            handler.write(img_data)
-#
-#        img = Image.open(filename)
-#        pytesseract.tesseract_cmd = path_to_tesseract
-#
-#        text = pytesseract.image_to_string(img)
-#        return text[:-1]
 
 
 class RedditController:
@@ -63,13 +16,18 @@ class RedditController:
         self.logger = logging.getLogger(__name__)
         self.databaseController = DatabaseController()
         self.botController = BotController()
+        self.reddit = praw.Reddit(
+            client_id=config.read_config('Reddit Config', 'client_id'),
+            client_secret=config.read_config('Reddit Config', 'client_secret'),
+            user_agent=config.read_config('Reddit Config', 'user_agent')
+        )
 
     def evaluatePosts(self):
         postcount = int(config.read_config('Reddit Config', 'post_count'))
         if not postcount:
             postcount = 10
 
-        new_submissions = reddit.subreddit(subreddit).new(limit=postcount)
+        new_submissions = self.reddit.subreddit(subreddit).new(limit=postcount)
         list_submissions = list(new_submissions)
         # self.logger.debug("Found %s new submissions.", len(list_submissions))
 
