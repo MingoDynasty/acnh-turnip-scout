@@ -1,15 +1,13 @@
 import logging.config
 import os
-import sys
-
 import sched
+import sys
 import time
 
 from database import DatabaseController
 from reddit_controller import RedditController
 
 ping_interval = 180  # TODO: move to config file; rename to poll
-
 
 if __name__ == '__main__':
     logConfFile = os.path.join(os.path.dirname(__file__), 'logging.conf')
