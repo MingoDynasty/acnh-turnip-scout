@@ -26,14 +26,14 @@ messages to the configured Telegram account.
 3. Modify the contents of `config.ini` to include your Reddit API key and Telegram bot token and chat ID.
 
     ```ini
-    [REDDITCONFIG]
+    [Reddit Config]
     client_id = your app id (below personal use script)
     client_secret = your secret
     user_agent = turnip scout
     post_count = 10
     subreddit = acturnips
 
-    [TELEGRAMCONFIG]
+    [Telegram Config]
     token = your bot token
     chatID = your chat id
     ```

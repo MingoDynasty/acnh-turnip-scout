@@ -11,13 +11,13 @@ from database import DatabaseController
 
 
 reddit = praw.Reddit(
-    client_id=config.read_config('REDDITCONFIG', 'client_id'),
-    client_secret=config.read_config('REDDITCONFIG', 'client_secret'),
-    user_agent=config.read_config('REDDITCONFIG', 'user_agent')
+    client_id=config.read_config('Reddit Config', 'client_id'),
+    client_secret=config.read_config('Reddit Config', 'client_secret'),
+    user_agent=config.read_config('Reddit Config', 'user_agent')
 )
 encodingType = 'utf-8'
-subreddit = config.read_config('REDDITCONFIG', 'subreddit')
-minimum_price = config.read_config('REDDITCONFIG', 'minimum_price')
+subreddit = config.read_config('Reddit Config', 'subreddit')
+minimum_price = config.read_config('Reddit Config', 'minimum_price')
 savedPosts = []
 
 
@@ -67,7 +67,7 @@ class RedditController:
         self.botController = BotController()
 
     def evaluatePosts(self):
-        postcount = int(config.read_config('REDDITCONFIG', 'post_count'))
+        postcount = int(config.read_config('Reddit Config', 'post_count'))
         if not postcount:
             postcount = 10
 

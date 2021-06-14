@@ -3,7 +3,7 @@ import sqlite3
 
 DB_PATH = 'data/turnip_submissions.db'
 
-
+# TODO: simply reuse connection, also so it's not possible to move the database file during script execution
 class DatabaseController:
     def __init__(self):
         self.logger = logging.getLogger(__name__)

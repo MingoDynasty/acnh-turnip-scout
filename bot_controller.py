@@ -5,15 +5,15 @@ from requests import get
 
 import config
 
-
+# TODO: use Telegram Python library instead
 class BotController:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
     def sendText(self, title, price, created, shortlink):
         # Globally store values from config instead of adding per request
-        token = config.read_config('TELEGRAMCONFIG', 'token')
-        chatID = config.read_config('TELEGRAMCONFIG', 'chatID')
+        token = config.read_config('Telegram Config', 'token')
+        chatID = config.read_config('Telegram Config', 'chatID')
 
         created = datetime.fromtimestamp(created).astimezone().replace(microsecond=0).strftime("%Y-%m-%d %I:%M:%S %p %Z")
         multi_line_msg = """I found a nice offer! I think the price is {price}.
