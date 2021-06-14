@@ -35,7 +35,7 @@ class DatabaseController:
 
     def add_submission(self, sub):
         if not self.does_submission_exists(sub.id):
-            self.logger.info("({id}) - Adding to db".format(id=sub.id))
+            self.logger.info("(%s) - Adding to db", sub.id)
             db = sqlite3.connect(DB_PATH)
             cursor = db.cursor()
             cursor.execute('''INSERT INTO submissions(id,title,created,shortlink) VALUES(?,?,?,?)''',
@@ -43,5 +43,5 @@ class DatabaseController:
             db.commit()
             return True
         else:
-            self.logger.info("({id}) - Submission already exists in db".format(id=sub.id))
+            self.logger.info("(%s) - Submission already exists in db", sub.id)
             return False
