@@ -31,7 +31,7 @@ class DatabaseController:
         cursor = db.cursor()
         cursor.execute('''SELECT * FROM submissions WHERE id = ?''', (_id,))
         all_rows = cursor.fetchall()
-        return True if len(all_rows) > 0 else False
+        return len(all_rows) > 0
 
     def add_submission(self, sub):
         if not self.does_submission_exists(sub.id):
@@ -42,6 +42,5 @@ class DatabaseController:
                            (sub.id, sub.title, sub.created_utc, sub.shortlink))
             db.commit()
             return True
-        else:
-            self.logger.info("(%s) - Submission already exists in db", sub.id)
-            return False
+        self.logger.info("(%s) - Submission already exists in db", sub.id)
+        return False
