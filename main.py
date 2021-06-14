@@ -6,7 +6,7 @@ import sched
 import time
 
 from database import DatabaseController
-from redditconfig import RedditController
+from reddit_controller import RedditController
 
 ping_interval = 180  # TODO: move to config file; rename to poll
 

@@ -26,8 +26,8 @@ Here's the link if you want to check it out: {shortlink}""".format(price=price, 
         response = get(send_text)
 
         if response.status_code == 200:
-            self.logger.info("[TG] - Message sent correctly")
+            self.logger.info("Message sent correctly")
             return True
         else:
-            self.logger.error("[TG] - Error while sending the message")
+            self.logger.error("Error while sending the message")
             return False

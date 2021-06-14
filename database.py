@@ -9,7 +9,7 @@ class DatabaseController:
         self.logger = logging.getLogger(__name__)
 
     def setup_db(self):
-        self.logger.info('[DB] Setting up database')
+        self.logger.info('Setting up database')
         db = sqlite3.connect(DB_PATH)
         # Get a cursor object
         cursor = db.cursor()
@@ -19,7 +19,7 @@ class DatabaseController:
         db.commit()
 
     def get_submissions(self):
-        self.logger.info('[DB] Fetching all submissions')
+        self.logger.info('Fetching all submissions')
         db = sqlite3.connect(DB_PATH)
         cursor = db.cursor()
         cursor.execute('''SELECT * FROM submissions''')
@@ -34,7 +34,7 @@ class DatabaseController:
 
     def add_submission(self, sub):
         if not self.does_submission_exists(sub.id):
-            self.logger.info("[DB]({id}) - Adding to db".format(id=sub.id))
+            self.logger.info("({id}) - Adding to db".format(id=sub.id))
             db = sqlite3.connect(DB_PATH)
             cursor = db.cursor()
             cursor.execute('''INSERT INTO submissions(id,title,created,shortlink) VALUES(?,?,?,?)''',
@@ -42,5 +42,5 @@ class DatabaseController:
             db.commit()
             return True
         else:
-            self.logger.info("[DB]({id}) - Submission already exists in db".format(id=sub.id))
+            self.logger.info("({id}) - Submission already exists in db".format(id=sub.id))
             return False
