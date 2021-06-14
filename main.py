@@ -2,9 +2,9 @@ import logging.config
 import os
 import sched
 import sys
-import config
 import time
 
+import config
 from database import DatabaseController
 from reddit_controller import RedditController
 
@@ -12,10 +12,10 @@ if __name__ == '__main__':
     logConfFile = os.path.join(os.path.dirname(__file__), 'logging.conf')
     if not os.path.isfile(logConfFile):
         print(logConfFile + " not found.")
-        exit()
+        sys.exit()
 
-    log_format = "%(asctime)-15s - %(levelname)s - %(message)s"
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format=log_format)
+    LOG_FORMAT = "%(asctime)-15s - %(levelname)s - %(message)s"
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format=LOG_FORMAT)
     logging.config.fileConfig(logConfFile)
     logger = logging.getLogger(__name__)
 
@@ -27,9 +27,9 @@ if __name__ == '__main__':
     str_poll_interval = config.read_config('Application Config', 'poll_interval')
     try:
         poll_interval = int(str_poll_interval)
-    except ValueError as e:
+    except ValueError:
         logger.error("poll_interval (%s) must be a number.", str_poll_interval)
-        exit(1)
+        sys.exit(1)
     logger.info("Using poll interval: %d", poll_interval)
 
     logger.info("---- Polling Reddit ----")

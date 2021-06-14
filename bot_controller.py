@@ -20,7 +20,7 @@ class BotController:
             "%Y-%m-%d %I:%M:%S %p %Z")
         multi_line_msg = """I found a nice offer! I think the price is {price}.
 Posted on: {created}
-Here's the link if you want to check it out: {shortlink}""".format(price=price, title=title, created=created,
+Here's the link if you want to check it out: {shortlink}""".format(price=price, created=created,
                                                                    shortlink=shortlink)
 
         # urlencode msg for safety
