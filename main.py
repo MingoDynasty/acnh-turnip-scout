@@ -1,6 +1,6 @@
 import logging.config
 import os
-import sched
+import schedule
 import sys
 import time
 
@@ -40,23 +40,16 @@ if __name__ == '__main__':
         sys.exit(1)
     logger.info("Using poll interval: %d", poll_interval)
 
-    logger.info("Polling Reddit...")
-    redditController.evaluatePosts()
-    logger.info("Poll finished.")
-
-    # main loop
-    scheduler = sched.scheduler(time.time, time.sleep)
-
-
-    def main_loop(sc):
+    def main_loop():
         logger.info("Polling Reddit...")
         redditController.evaluatePosts()
         logger.info("Poll finished.")
-        scheduler.enter(poll_interval, 1, main_loop, (sc,))
-
 
     try:
-        scheduler.enter(poll_interval, 1, main_loop, (scheduler,))
-        scheduler.run()
+        schedule.every(poll_interval).seconds.do(main_loop)
+        main_loop()
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
     except KeyboardInterrupt:
         logger.info("Stopping the bot...")
