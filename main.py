@@ -39,18 +39,18 @@ if __name__ == '__main__':
         sys.exit(1)
     logger.info("Using poll interval: %d", poll_interval)
 
-    logger.info("---- Polling Reddit ----")
+    logger.info("Polling Reddit...")
     redditController.evaluatePosts()
-    logger.info("---- Poll finished ----")
+    logger.info("Poll finished.")
 
     # main loop
     scheduler = sched.scheduler(time.time, time.sleep)
 
 
     def main_loop(sc):
-        logger.info("---- Polling Reddit ----")
+        logger.info("Polling Reddit...")
         redditController.evaluatePosts()
-        logger.info("---- Poll finished ----")
+        logger.info("Poll finished.")
         scheduler.enter(poll_interval, 1, main_loop, (sc,))
 
 
@@ -58,4 +58,4 @@ if __name__ == '__main__':
         scheduler.enter(poll_interval, 1, main_loop, (scheduler,))
         scheduler.run()
     except KeyboardInterrupt:
-        logger.info("---- Stopping the bot ----")
+        logger.info("Stopping the bot...")
