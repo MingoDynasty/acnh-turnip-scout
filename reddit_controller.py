@@ -55,7 +55,7 @@ class RedditController:
                     if self.databaseController.add_submission(submission):
                         _logger.info("(%s) - Submission added, sending message", submission.id)
                         telegram.sendText(submission.title, biggest_number, submission.created_utc,
-                                                    submission.shortlink)
+                                          submission.shortlink)
                         count += 1
                     else:
                         _logger.error("(%s) - Error while adding submission to database", submission.id)
