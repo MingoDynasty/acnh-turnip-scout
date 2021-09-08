@@ -40,7 +40,7 @@ if __name__ == '__main__':
         sys.exit(1)
     logger.info("Using poll interval (seconds): %d", poll_interval)
 
-    def main_loop():
+    def main_loop() -> None:
         logger.info("Polling Reddit...")
         redditController.evaluatePosts()
         logger.info("Poll finished.")

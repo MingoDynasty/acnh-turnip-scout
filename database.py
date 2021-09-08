@@ -15,7 +15,7 @@ DB_PATH = config.read_config('Application Config', 'db_path')
 class DatabaseController:
 
     # TODO: for debugging only. Remove later.
-    def move_db(self):
+    def move_db(self) -> None:
         _logger.info('Moving database...')
         if not os.path.exists(DB_PATH):
             _logger.info("DB (%s) does not exist. Nothing to move.", DB_PATH)

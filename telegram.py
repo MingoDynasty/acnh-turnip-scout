@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 
 
 # TODO: use Telegram Python library instead
-def sendText(submission_id: int, title, price, created, shortlink):
+def sendText(submission_id: int, title, price, created, shortlink) -> bool:
     # Globally store values from config instead of adding per request
     token = config.read_config('Telegram Config', 'token')
     chatID = config.read_config('Telegram Config', 'chatID')

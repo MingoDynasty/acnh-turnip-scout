@@ -13,7 +13,6 @@ minimum_price = int(config.read_config('Reddit Config', 'minimum_price'))
 _logger = logging.getLogger(__name__)
 
 
-# TODO: type hints everywhere
 class RedditController:
     def __init__(self):
         self.databaseController = DatabaseController()
