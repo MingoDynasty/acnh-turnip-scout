@@ -1,16 +1,26 @@
 import logging
 import sqlite3
+import os
+import datetime
 
 DB_PATH = 'data/turnip_submissions.db'
-
+_logger = logging.getLogger(__name__)
 
 # TODO: simply reuse connection, also so it's not possible to move the database file during script execution
 class DatabaseController:
-    def __init__(self):
-        self.logger = logging.getLogger(__name__)
+
+    # TODO: for debugging only. Remove later.
+    def move_db(self):
+        _logger.info('Backing up database...')
+        if not os.path.exists(DB_PATH):
+            _logger.info("DB (%s) does not exist. Nothing to backup.", DB_PATH)
+            return
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%I%M%S")
+        print(timestamp)
+        os.rename(DB_PATH, f"{DB_PATH}.{timestamp}")
 
     def setup_db(self):
-        self.logger.info('Setting up database')
+        _logger.info('Setting up database...')
         db = sqlite3.connect(DB_PATH)
         # Get a cursor object
         cursor = db.cursor()
@@ -19,8 +29,9 @@ class DatabaseController:
         ''')
         db.commit()
 
+    # TODO: Type hints, and use PyDantic?
     def get_submissions(self):
-        self.logger.info('Fetching all submissions')
+        _logger.info('Fetching all submissions')
         db = sqlite3.connect(DB_PATH)
         cursor = db.cursor()
         cursor.execute('''SELECT * FROM submissions''')
@@ -35,12 +46,12 @@ class DatabaseController:
 
     def add_submission(self, sub):
         if not self.does_submission_exists(sub.id):
-            self.logger.info("(%s) - Adding to db", sub.id)
+            _logger.info("(%s) - Adding to db", sub.id)
             db = sqlite3.connect(DB_PATH)
             cursor = db.cursor()
             cursor.execute('''INSERT INTO submissions(id,title,created,shortlink) VALUES(?,?,?,?)''',
                            (sub.id, sub.title, sub.created_utc, sub.shortlink))
             db.commit()
             return True
-        self.logger.info("(%s) - Submission already exists in db", sub.id)
+        _logger.info("(%s) - Submission already exists in db", sub.id)
         return False

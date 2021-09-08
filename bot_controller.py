@@ -5,12 +5,10 @@ from requests import get
 
 import config
 
+_logger = logging.getLogger(__name__)
 
 # TODO: use Telegram Python library instead
 class BotController:
-    def __init__(self):
-        self.logger = logging.getLogger(__name__)
-
     def sendText(self, title, price, created, shortlink):
         # Globally store values from config instead of adding per request
         token = config.read_config('Telegram Config', 'token')
@@ -29,7 +27,7 @@ Here's the link if you want to check it out: {shortlink}""".format(price=price, 
         response = get(send_text)
 
         if response.status_code == 200:
-            self.logger.info("Successfully sent message.")
+            _logger.info("Successfully sent message.")
             return True
-        self.logger.error("Failed to send message.")
+        _logger.error("Failed to send message.")
         return False
