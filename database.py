@@ -16,7 +16,6 @@ class DatabaseController:
             _logger.info("DB (%s) does not exist. Nothing to backup.", DB_PATH)
             return
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%I%M%S")
-        print(timestamp)
         os.rename(DB_PATH, f"{DB_PATH}.{timestamp}")
 
     def setup_db(self):

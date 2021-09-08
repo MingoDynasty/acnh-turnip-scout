@@ -31,7 +31,7 @@ class RedditController:
 
         new_submissions = self.reddit.subreddit(subreddit).new(limit=post_count)
         list_submissions = list(new_submissions)
-        # _logger.debug("Found %s new submissions.", len(list_submissions))
+        _logger.info("Found %s new submissions.", len(list_submissions))
 
         count = 0
 
