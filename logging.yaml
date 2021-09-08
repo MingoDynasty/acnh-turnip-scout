@@ -61,7 +61,7 @@ handlers:
 
 root:
   level: NOTSET
-  handlers: [ console ]
+  handlers: [ console, info_file_handler, error_file_handler, critical_file_handler, debug_file_handler, warn_file_handler ]
   propagate: false
 
 loggers:
