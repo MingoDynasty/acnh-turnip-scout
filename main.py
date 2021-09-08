@@ -38,7 +38,7 @@ if __name__ == '__main__':
     except ValueError:
         logger.error("poll_interval (%s) must be a number.", str_poll_interval)
         sys.exit(1)
-    logger.info("Using poll interval: %d", poll_interval)
+    logger.info("Using poll interval (seconds): %d", poll_interval)
 
     def main_loop():
         logger.info("Polling Reddit...")
