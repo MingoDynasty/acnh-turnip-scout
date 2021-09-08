@@ -12,9 +12,9 @@ class DatabaseController:
 
     # TODO: for debugging only. Remove later.
     def move_db(self):
-        _logger.info('Backing up database...')
+        _logger.info('Moving database...')
         if not os.path.exists(DB_PATH):
-            _logger.info("DB (%s) does not exist. Nothing to backup.", DB_PATH)
+            _logger.info("DB (%s) does not exist. Nothing to move.", DB_PATH)
             return
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%I%M%S")
         os.rename(DB_PATH, f"{DB_PATH}.{timestamp}")
