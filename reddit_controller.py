@@ -26,7 +26,7 @@ class RedditController:
         if self.post_limit < 1:
             raise Exception(f"Post count ({self.post_limit}) must be >= 1.")
 
-    def evaluatePosts(self):
+    def evaluatePosts(self) -> None:
         new_submissions = self.reddit.subreddit(subreddit).new(limit=self.post_limit)
         list_submissions = list(new_submissions)
         _logger.info("Found %d new submissions.", len(list_submissions))

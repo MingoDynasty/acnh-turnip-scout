@@ -3,3 +3,4 @@ praw==7.4.0
 prawcore==2.3.0
 requests==2.26.0
 PyYAML==5.4.1
+schedule==1.1.0
