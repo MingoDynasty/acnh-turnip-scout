@@ -4,7 +4,7 @@ import re
 import praw
 
 import config
-from bot_controller import BotController
+import telegram
 from database import DatabaseController
 
 subreddit = config.read_config('Reddit Config', 'subreddit')
@@ -18,7 +18,6 @@ class RedditController:
     def __init__(self):
 
         self.databaseController = DatabaseController()
-        self.botController = BotController()
         self.reddit = praw.Reddit(
             client_id=config.read_config('Reddit Config', 'client_id'),
             client_secret=config.read_config('Reddit Config', 'client_secret'),
@@ -55,7 +54,7 @@ class RedditController:
                     # try adding to database
                     if self.databaseController.add_submission(submission):
                         _logger.info("(%s) - Submission added, sending message", submission.id)
-                        self.botController.sendText(submission.title, biggest_number, submission.created_utc,
+                        telegram.sendText(submission.title, biggest_number, submission.created_utc,
                                                     submission.shortlink)
                         count += 1
                     else:
