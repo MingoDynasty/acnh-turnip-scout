@@ -1,10 +1,11 @@
-import logging
-import sqlite3
-import os
 import datetime
+import logging
+import os
+import sqlite3
 
 DB_PATH = 'data/turnip_submissions.db'
 _logger = logging.getLogger(__name__)
+
 
 # TODO: simply reuse connection, also so it's not possible to move the database file during script execution
 class DatabaseController:

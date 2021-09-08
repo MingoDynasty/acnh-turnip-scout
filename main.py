@@ -1,12 +1,12 @@
 import logging.config
 import os
-import sys
-
 import sched
+import sys
 import time
 
-import config
 import yaml
+
+import config
 from database import DatabaseController
 from reddit_controller import RedditController
 

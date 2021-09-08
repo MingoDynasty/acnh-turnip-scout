@@ -12,10 +12,11 @@ minimum_price = int(config.read_config('Reddit Config', 'minimum_price'))
 
 _logger = logging.getLogger(__name__)
 
+
 # TODO: type hints everywhere
 class RedditController:
     def __init__(self):
-        
+
         self.databaseController = DatabaseController()
         self.botController = BotController()
         self.reddit = praw.Reddit(
@@ -60,7 +61,8 @@ class RedditController:
                     else:
                         _logger.error("(%s) - Error while adding submission to database", submission.id)
                 else:
-                    _logger.info("(%s) - Price '%d' is lower than minimum price %d.", submission.id, biggest_number, minimum_price)
+                    _logger.info("(%s) - Price '%d' is lower than minimum price %d.", submission.id, biggest_number,
+                                 minimum_price)
             else:
                 # else ignore submission
                 pass

@@ -7,6 +7,7 @@ import config
 
 _logger = logging.getLogger(__name__)
 
+
 # TODO: use Telegram Python library instead
 class BotController:
     def sendText(self, title, price, created, shortlink):
