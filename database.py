@@ -3,10 +3,12 @@ import logging
 import os
 import sqlite3
 
+import config
 from praw import models
 
-DB_PATH = 'data/turnip_submissions.db'
 _logger = logging.getLogger(__name__)
+
+DB_PATH = config.read_config('Application Config', 'db_path')
 
 
 # TODO: simply reuse connection, also so it's not possible to move the database file during script execution
@@ -32,7 +34,7 @@ class DatabaseController:
         db.commit()
 
     def get_submissions(self) -> list:
-        _logger.info('Fetching all submissions')
+        _logger.info('Fetching all submissions...')
         db = sqlite3.connect(DB_PATH)
         cursor = db.cursor()
         cursor.execute('''SELECT * FROM submissions''')
@@ -47,12 +49,12 @@ class DatabaseController:
 
     def add_submission(self, sub: models.Submission) -> bool:
         if not self.does_submission_exists(sub.id):
-            _logger.info("(%s) - Adding to db...", sub.id)
+            _logger.info("(%s) - Adding submission to database...", sub.id)
             db = sqlite3.connect(DB_PATH)
             cursor = db.cursor()
             cursor.execute('''INSERT INTO submissions(id,title,created,shortlink) VALUES(?,?,?,?)''',
                            (sub.id, sub.title, sub.created_utc, sub.shortlink))
             db.commit()
             return True
-        _logger.info("(%s) - Submission already exists in db", sub.id)
+        _logger.info("(%s) - Submission already exists in database.", sub.id)
         return False

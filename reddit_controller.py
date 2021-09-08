@@ -29,39 +29,38 @@ class RedditController:
     def evaluatePosts(self):
         new_submissions = self.reddit.subreddit(subreddit).new(limit=self.post_limit)
         list_submissions = list(new_submissions)
-        _logger.info("Found %s new submissions.", len(list_submissions))
+        _logger.info("Found %d new submissions.", len(list_submissions))
 
         # iterate over new submissions from oldest to newest
         num_submissions_matching_filter = 0
         submission: praw.reddit.models.Submission
         for submission in reversed(list_submissions):
+            if submission.link_flair_text != 'Active':
+                _logger.warning("(%s) - Submission not Active. Skipping...", submission.id)
+                continue
+            if self.databaseController.does_submission_exists(submission.id):
+                _logger.warning("(%s) - Submission already considered. Skipping...", submission.id)
+                continue
 
-            # if the submission is Active and we haven't already considered it, then do something
-            if submission.link_flair_text == 'Active' or not self.databaseController.does_submission_exists(
-                    submission.id):
-
-                numbers = re.findall(r'\d+', submission.title)
-                if numbers:
-                    # use list comprehension to easily get biggest number
-                    biggest_number = max([int(num) for num in numbers])
-                else:
-                    _logger.warning("(%s) - Couldn't find price in title '%s'!", submission.id, submission.title)
-                    continue
-
-                if biggest_number >= minimum_price:
-                    # try adding to database
-                    if self.databaseController.add_submission(submission):
-                        _logger.info("(%s) - Submission added, sending message...", submission.id)
-                        telegram.sendText(submission.id, submission.title, biggest_number, submission.created_utc,
-                                          submission.shortlink)
-                        num_submissions_matching_filter += 1
-                    else:
-                        _logger.error("(%s) - Error while adding submission to database", submission.id)
-                else:
-                    _logger.info("(%s) - Price '%d' is lower than minimum price %d.", submission.id, biggest_number,
-                                 minimum_price)
+            numbers = re.findall(r'\d+', submission.title)
+            if numbers:
+                # use list comprehension to easily get biggest number
+                biggest_number = max([int(num) for num in numbers])
             else:
-                # else ignore submission
-                pass
+                _logger.warning("(%s) - Failed to find price in title: %s", submission.id, submission.title)
+                continue
 
-        _logger.info("Found %d/%s submissions matching filter.", num_submissions_matching_filter, len(list_submissions))
+            if biggest_number >= minimum_price:
+                # try adding to database
+                if self.databaseController.add_submission(submission):
+                    _logger.info("(%s) - Submission added, sending message...", submission.id)
+                    telegram.sendText(submission.id, submission.title, biggest_number, submission.created_utc,
+                                      submission.shortlink)
+                    num_submissions_matching_filter += 1
+                else:
+                    _logger.error("(%s) - Failed to add submission to database.", submission.id)
+            else:
+                _logger.info("(%s) - Price (%d) is lower than minimum price (%d)..", submission.id, biggest_number,
+                             minimum_price)
+
+        _logger.info("Found %d/%d submissions matching filter.", num_submissions_matching_filter, len(list_submissions))
