@@ -62,15 +62,15 @@ handlers:
 root:
   level: NOTSET
   handlers: [ console ]
-  propogate: yes
+  propagate: false
 
 loggers:
   prawcore:
     level: WARNING
     handlers: [ console, info_file_handler, error_file_handler, critical_file_handler, debug_file_handler, warn_file_handler ]
-    propogate: true
+    propagate: true
 
   urllib3:
     level: WARNING
     handlers: [ console, info_file_handler, error_file_handler, critical_file_handler, debug_file_handler, warn_file_handler ]
-    propogate: true
+    propagate: true
