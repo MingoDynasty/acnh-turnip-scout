@@ -16,26 +16,23 @@ _logger = logging.getLogger(__name__)
 # TODO: type hints everywhere
 class RedditController:
     def __init__(self):
-
         self.databaseController = DatabaseController()
         self.reddit = praw.Reddit(
             client_id=config.read_config('Reddit Config', 'client_id'),
             client_secret=config.read_config('Reddit Config', 'client_secret'),
             user_agent=config.read_config('Reddit Config', 'user_agent')
         )
+        self.post_limit = int(config.read_config('Reddit Config', 'post_limit'))
+        if self.post_limit < 1:
+            raise Exception(f"Post count ({self.post_limit}) must be >= 1.")
 
     def evaluatePosts(self):
-        post_count = int(config.read_config('Reddit Config', 'post_count'))
-        if not post_count:
-            post_count = 10
-
-        new_submissions = self.reddit.subreddit(subreddit).new(limit=post_count)
+        new_submissions = self.reddit.subreddit(subreddit).new(limit=self.post_limit)
         list_submissions = list(new_submissions)
         _logger.info("Found %s new submissions.", len(list_submissions))
 
-        count = 0
-
         # iterate over new submissions from oldest to newest
+        num_submissions_matching_filter = 0
         submission: praw.reddit.models.Submission
         for submission in reversed(list_submissions):
 
@@ -57,7 +54,7 @@ class RedditController:
                         _logger.info("(%s) - Submission added, sending message...", submission.id)
                         telegram.sendText(submission.id, submission.title, biggest_number, submission.created_utc,
                                           submission.shortlink)
-                        count += 1
+                        num_submissions_matching_filter += 1
                     else:
                         _logger.error("(%s) - Error while adding submission to database", submission.id)
                 else:
@@ -67,4 +64,4 @@ class RedditController:
                 # else ignore submission
                 pass
 
-        _logger.info("Found %d submissions matching filter.", count)
+        _logger.info("Found %d/%s submissions matching filter.", num_submissions_matching_filter, len(list_submissions))
