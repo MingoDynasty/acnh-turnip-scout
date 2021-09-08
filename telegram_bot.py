@@ -19,7 +19,7 @@ def sendText(submission_id: int, title, price, created, shortlink) -> bool:
     multi_line_msg = """I found a nice offer! I think the price is {price}.
 Posted on: {created}
 Here's the link if you want to check it out: {shortlink}""".format(price=price, created=created,
-                                                               shortlink=shortlink)
+                                                                   shortlink=shortlink)
 
     # urlencode msg for safety
     send_text = 'https://api.telegram.org/bot' + token + '/sendMessage?chat_id=' + chatID + '&parse_mode=Markdown&text=' + multi_line_msg

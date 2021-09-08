@@ -4,7 +4,7 @@ import re
 import praw
 
 import config
-import telegram
+import telegram_bot
 from database import DatabaseController
 
 subreddit = config.read_config('Reddit Config', 'subreddit')
@@ -28,7 +28,7 @@ class RedditController:
     def evaluatePosts(self) -> None:
         new_submissions = self.reddit.subreddit(subreddit).new(limit=self.post_limit)
         list_submissions = list(new_submissions)
-        _logger.info("Found %d new submissions.", len(list_submissions))
+        _logger.info("Found %d submissions.", len(list_submissions))
 
         # iterate over new submissions from oldest to newest
         num_submissions_matching_filter = 0
@@ -53,8 +53,8 @@ class RedditController:
                 # try adding to database
                 if self.databaseController.add_submission(submission):
                     _logger.info("(%s) - Submission added, sending message...", submission.id)
-                    telegram.sendText(submission.id, submission.title, biggest_number, submission.created_utc,
-                                      submission.shortlink)
+                    telegram_bot.sendText(submission.id, submission.title, biggest_number, submission.created_utc,
+                                          submission.shortlink)
                     num_submissions_matching_filter += 1
                 else:
                     _logger.error("(%s) - Failed to add submission to database.", submission.id)
