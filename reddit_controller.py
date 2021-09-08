@@ -36,10 +36,10 @@ class RedditController:
         submission: praw.reddit.models.Submission
         for submission in reversed(list_submissions):
             if submission.link_flair_text != 'Active':
-                _logger.warning("(%s) - Submission not Active. Skipping...", submission.id)
+                _logger.debug("(%s) - Submission not Active. Skipping...", submission.id)
                 continue
             if self.databaseController.does_submission_exists(submission.id):
-                _logger.warning("(%s) - Submission already considered. Skipping...", submission.id)
+                _logger.debug("(%s) - Submission already considered. Skipping...", submission.id)
                 continue
 
             numbers = re.findall(r'\d+', submission.title)
