@@ -36,6 +36,7 @@ class RedditController:
         count = 0
 
         # iterate over new submissions from oldest to newest
+        submission: praw.reddit.models.Submission
         for submission in reversed(list_submissions):
 
             # if the submission is Active and we haven't already considered it, then do something
@@ -53,8 +54,8 @@ class RedditController:
                 if biggest_number >= minimum_price:
                     # try adding to database
                     if self.databaseController.add_submission(submission):
-                        _logger.info("(%s) - Submission added, sending message", submission.id)
-                        telegram.sendText(submission.title, biggest_number, submission.created_utc,
+                        _logger.info("(%s) - Submission added, sending message...", submission.id)
+                        telegram.sendText(submission.id, submission.title, biggest_number, submission.created_utc,
                                           submission.shortlink)
                         count += 1
                     else:

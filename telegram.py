@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 
 
 # TODO: use Telegram Python library instead
-def sendText(title, price, created, shortlink):
+def sendText(submission_id: int, title, price, created, shortlink):
     # Globally store values from config instead of adding per request
     token = config.read_config('Telegram Config', 'token')
     chatID = config.read_config('Telegram Config', 'chatID')
@@ -27,7 +27,7 @@ Here's the link if you want to check it out: {shortlink}""".format(price=price, 
     response = get(send_text)
 
     if response.status_code == 200:
-        _logger.info("Successfully sent message.")
+        _logger.info("(%s) - Successfully sent message.", submission_id)
         return True
-    _logger.error("Failed to send message.")
+    _logger.error("(%s) - Failed to send message.", submission_id)
     return False
