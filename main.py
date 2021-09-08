@@ -16,8 +16,9 @@ if __name__ == '__main__':
         print(logConfFile + " not found.")
         sys.exit()
 
-    LOG_FORMAT = "%(asctime)-15s - %(levelname)s - %(message)s"
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format=LOG_FORMAT)
+    # create a directory for log files to go into
+    if not os.path.isdir("logs"):
+        os.makedirs("logs")
 
     with open(logConfFile, 'r') as fh:
         logging_config = yaml.safe_load(fh.read())
